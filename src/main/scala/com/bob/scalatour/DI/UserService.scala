@@ -11,9 +11,7 @@ trait UserService {
   def delete(user: User)
 }
 
-class MockUserService extends UserService {
-
-  var userRepository: UserRepository = _
+class MockUserService(val userRepository: UserRepository) extends UserService {
 
   def create(user: User) = userRepository.create(user)
 
