@@ -25,3 +25,8 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
 libraryDependencies += "org.scala-lang.modules" % "scala-async_2.11" % "0.9.6-RC2"
 
 libraryDependencies += "com.typesafe" % "config" % "1.3.0"
+
+libraryDependencies ++= Seq(
+  "com.twitter" %% "finagle-http" % "6.34.0",
+  "com.twitter" %% "finagle-mysql" % "6.34.0"
+)
