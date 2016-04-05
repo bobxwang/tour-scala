@@ -7,6 +7,9 @@ import scala.collection.parallel.immutable.ParRange
 import scala.collection.parallel.{ParSeq, ParMap, ParSet}
 import scala.collection.{SortedMap, SortedSet, mutable}
 
+/**
+ * Nil是一个空的List，定义为List[Nothing]
+ */
 class CollectionTest extends FunSuite {
 
   test("basiclist") {

@@ -15,6 +15,7 @@ object MysqlTips {
       .withCredentials("root", "zufangbao69fc")
       .withDatabase("51banka")
       .newRichClient("192.168.2.200:3306")
+
     val query = "select * from T_BKProcess where BankID = 5 limit 5"
     val resultq = mysqlClient.select(query) {
       row => {

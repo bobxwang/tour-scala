@@ -29,4 +29,4 @@ libraryDependencies += "com.typesafe" % "config" % "1.3.0"
 libraryDependencies ++= Seq(
   "com.twitter" %% "finagle-http" % "6.34.0",
   "com.twitter" %% "finagle-mysql" % "6.34.0"
-)
+).map(_.exclude("com.google.code.findbugs", "jsr305"))
