@@ -1,6 +1,8 @@
 baseAssemblySettings
 
-mainClass in(Compile, run) := Some("com.bob.scalatour.DI.DIMain")
+mainClass in assembly := Some("com.bob.scalatour.designpattern.Decorator")
+
+assemblyJarName in assembly := "com.bob.scalatour.jar"
 
 assemblyMergeStrategy in assembly := {
   case PathList("javax", "servlet", xs@_*) => MergeStrategy.first

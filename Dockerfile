@@ -7,15 +7,20 @@ FROM williamyeh/scala
 MAINTAINER bob
 
 # Install netcat
-RUN yum update && yum -y install netcat && yum -y install curl
+RUN \
+    yum update && \
+    yum -y install curl && \
+    mkdir /apps
 
 # private only
-EXPOSE 80
+EXPOSE 8080
 
 # 授权访问从容器内到主机上的目录
 VOLUME /tmp
 
 # 指定RUN,CMD与ENTRYPOINT命令的工作目录
-WORKDIR /scalatour
+WORKDIR /apps
 
 ADD target/scala-2.11/com.bob.scalatour.jar com.bob.scalatour.jar
+
+CMD["java","-jar","com.bob.scalatour.jar"]
