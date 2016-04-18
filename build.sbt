@@ -30,3 +30,5 @@ libraryDependencies ++= Seq(
   "com.twitter" %% "finagle-http" % "6.34.0",
   "com.twitter" %% "finagle-mysql" % "6.34.0"
 ).map(_.exclude("com.google.code.findbugs", "jsr305"))
+
+libraryDependencies += "org.json4s" %% "json4s-native" % "3.3.0"

@@ -1,8 +1,7 @@
 package com.bob.scalatour.twitters
 
 import java.sql.Timestamp
-import java.time.ZoneId
-import java.util.{TimeZone, Date}
+import java.util.{Date, TimeZone}
 
 import com.twitter.finagle.exp.Mysql
 import com.twitter.finagle.exp.mysql.TimestampValue
@@ -35,7 +34,7 @@ object MysqlTips {
                       |VALUES
                       |(?,?,?,?); """.stripMargin.replaceAll("\n", "")
     val ps = mysqlClient.prepare(insertSql)
-    val timezone = new TimestampValue(TimeZone.getTimeZone(ZoneId.systemDefault()), TimeZone.getTimeZone(ZoneId.systemDefault()))
+    val timezone = new TimestampValue(TimeZone.getDefault, TimeZone.getDefault)
     twitterAwait.result(ps(12, 1, 2, timezone.apply(new Timestamp(new Date().getTime))).ensure(mysqlClient.close))
 
     println("invoke done")

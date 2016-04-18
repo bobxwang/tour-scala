@@ -23,4 +23,4 @@ WORKDIR /apps
 
 ADD target/scala-2.11/com.bob.scalatour.jar com.bob.scalatour.jar
 
-CMD["java","-jar","com.bob.scalatour.jar"]
+CMD ["java","-jar","com.bob.scalatour.jar"]
