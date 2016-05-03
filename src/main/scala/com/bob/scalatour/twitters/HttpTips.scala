@@ -20,7 +20,8 @@ object HttpTips {
     val url = Request.queryString("/calculator/users/anticheat", Map("userId" -> "314"))
     println(url)
     val request = Request(Method.Get, "/")
-    request.headerMap.add("host", "riskopenapi.51.nb")
+    // here we should set the host header value even it is empty,otherwise it will nothing can obtain
+    request.headerMap.add("host", "")
     (1 to 20).map {
       z => {
         println(s"now is the ${z} request to send")
