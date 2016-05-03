@@ -18,6 +18,9 @@ object BasicTips {
     val arr = Array("what's", "up", "doc?")
     /* 在数组参数后加一个冒号和一个_*符号，是告诉编译器把arr的每个元素当作参数，而不是当作单一的参数传echo */
     echo(arr: _*)
+
+    val data = Seq.fill(10)(util.Random.nextString(6))
+    echo(data: _*)
   }
 
 }
