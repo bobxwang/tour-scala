@@ -43,17 +43,29 @@ libraryDependencies ++= Seq(
 
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.38"
 
-libraryDependencies += "org.scalikejdbc" %% "scalikejdbc" % "2.3.5"
+libraryDependencies += ("org.scalikejdbc" %% "scalikejdbc" % "2.3.5")
+  .excludeAll(ExclusionRule(organization = "commons-logging"))
 
 libraryDependencies += "org.scalaz" %% "scalaz-core" % "7.2.2"
 
 libraryDependencies += ("com.netflix.eureka" % "eureka-client" % "1.1.147")
   .exclude("javax.ws.rs", "jsr311-api")
-  .exclude("commons-logging", "commons-logging")
   .exclude("xmlpull", "xmlpull")
+  .excludeAll(ExclusionRule(organization = "commons-logging"),
+    ExclusionRule(organization = "io.reactivex", name = "rxjava"))
+
+libraryDependencies ++= Seq(
+  "io.reactivex" % "rxjava-joins" % "0.22.0",
+  "io.reactivex" % "rxjava" % "1.1.5"
+)
 
 /* 依赖okhttpclient版本为2，去掉 */
 libraryDependencies ++= Seq(
   //  "com.netflix.feign" % "feign-okhttp" % "8.16.2",
   "com.netflix.feign" % "feign-ribbon" % "8.16.2"
 ).map(_.exclude("com.squareup.okhttp", "okhttp"))
+
+//libraryDependencies += "org.msgpack" %% "msgpack-scala" % "0.6.11"
+
+// a consistency, persistance and performance map using off-heap
+//libraryDependencies += "net.openhft" % "chronicle-map" % "3.8.0"
