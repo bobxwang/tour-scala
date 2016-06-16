@@ -6,13 +6,22 @@ import java.util.{Date, TimeZone}
 import com.twitter.finagle.exp.Mysql
 import com.twitter.finagle.exp.mysql.TimestampValue
 import com.twitter.util.{Await => twitterAwait}
+import com.twitter.finagle.client._
+import com.twitter.conversions.time._
 
 object MysqlTips {
 
   def main(args: Array[String]) {
+
+    this.sqlClient()
+
     val mysqlClient = Mysql.client
       .withCredentials("root", "zufangbao69fc")
       .withDatabase("51banka")
+      .configured(DefaultPool.Param(low = 0, high = 10,
+      idleTime = 5.minutes,
+      bufferSize = 0,
+      maxWaiters = Int.MaxValue))
       .newRichClient("192.168.2.200:3306")
 
     val query = "select * from T_BKProcess where BankID = 5 limit 5"
@@ -38,5 +47,22 @@ object MysqlTips {
     twitterAwait.result(ps(12, 1, 2, timezone.apply(new Timestamp(new Date().getTime))).ensure(mysqlClient.close))
 
     println("invoke done")
+  }
+
+  def sqlClient() = {
+    val mysqlClient = Mysql.client
+      .withCredentials("loanuser", "k!dFdrPJBhruHiS8OlL9")
+      .withDatabase("LoanPro")
+      .newRichClient("192.168.59.135:3310")
+    val query = "select * from bank_account limit 10"
+    mysqlClient.select(query) {
+      row => {
+        val ct = row("account").get
+        (ct, row("name").get)
+      }
+    }.map(x => {
+      x.foreach(println)
+    }).ensure(mysqlClient.close)
+
   }
 }
