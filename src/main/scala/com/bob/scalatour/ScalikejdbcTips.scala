@@ -1,5 +1,7 @@
 package com.bob.scalatour
 
+import com.bob.models.{AdminEntity, BBTestEntity}
+import org.joda.time.DateTime
 import scalikejdbc._
 
 case class Bank(id: Int, name: String)
@@ -24,14 +26,30 @@ object ScalikejdbcTips {
     warningLogLevel = 'warn
   )
 
+  ConnectionPool.singleton(DbConfigs.InTest.banka._3, DbConfigs.InTest.banka._1, DbConfigs.InTest.banka._2)
+
   def describe(table: String) = println(DB.describe(table))
 
   def tables() = println(DB.showTables())
 
-  implicit val session = ReadOnlyAutoSession
+  implicit val session = AutoSession
 
   def main(args: Array[String]) {
-    runInBank
+    try {
+      DB.localTx(implicit session => {
+        (1 to 5).foreach(x => {
+          if (x > 3) {
+            throw new Exception("just test for rollback")
+          }
+          val bb = BBTestEntity.create(Some(s"111${x}"), Some(s"eeee${x}"), Some(s"Ddd${x}"))
+          println(bb)
+          val am = AdminEntity.create(s"name${x}", "12345", 1, DateTime.now(), DateTime.now(), 1)
+          println(am)
+        })
+      })
+    } catch {
+      case e: Exception => println(e.getMessage)
+    }
   }
 
   def toMap(rs: WrappedResultSet): Map[String, Any] = {
@@ -45,8 +63,6 @@ object ScalikejdbcTips {
   }
 
   def runInBank(): Unit = {
-
-    ConnectionPool.singleton(DbConfigs.InTest.banka._3, DbConfigs.InTest.banka._1, DbConfigs.InTest.banka._2)
 
     val selfimp = sql"select BankID,BankName from T_Bank limit 2".map(rs => {
       toMap(rs)
