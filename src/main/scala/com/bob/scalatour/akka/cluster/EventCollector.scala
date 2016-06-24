@@ -1,9 +1,9 @@
 package com.bob.scalatour.akka.cluster
 
 import akka.actor.Terminated
-import akka.cluster.ClusterEvent.{MemberEvent, MemberRemoved, UnreachableMember, MemberUp}
+import akka.cluster.ClusterEvent._
 
-class EventCollector extends ClusterWorker {
+class EventCollector extends ClusterRoledWorker {
 
   @volatile var recordCounter: Int = 0
 
@@ -18,7 +18,7 @@ class EventCollector extends ClusterWorker {
     }
     case Terminated(interceptingActorRef) => workers = workers.filterNot(_ == interceptingActorRef)
     case RawNginxRecord(sourceHost, line) => {
-      val eventCode = "eventcode=(\\d+)".r.findFirstIn(line).get
+      val eventCode = "eventcode=(\\d+)".r.findFirstIn(line).getOrElse("")
       println(s"Raw message: eventCode=${eventCode}, sourceHost=${sourceHost}, line=${line}")
       recordCounter += 1
       if (workers.size > 0) {

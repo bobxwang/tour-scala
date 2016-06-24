@@ -7,6 +7,9 @@ import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext
 import scala.concurrent.forkjoin.ForkJoinPool
 
+/**
+ * 不属于我们创建的Akka集群，位于集群外的一个节点，模拟向各个collector角色的节点发送消息
+ */
 class EventClientActor extends Actor {
 
   implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(new ForkJoinPool())
@@ -43,8 +46,8 @@ class EventClientActor extends Actor {
 
   Thread.sleep(30000)
   context.system.scheduler.schedule(0 millis, 5000 millis) {
-    ports.foreach(port=>{
-      events(port).foreach(line=>{
+    ports.foreach(port => {
+      events(port).foreach(line => {
         println("RAW: port=" + port + ", line=" + line)
         actors(port) ! RawNginxRecord("host.me:" + port, line)
       })
