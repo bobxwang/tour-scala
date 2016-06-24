@@ -1,3 +1,5 @@
+scalikejdbcSettings
+
 organization := "com.bob"
 
 name := "scalatour"
@@ -6,25 +8,36 @@ version := "1.0"
 
 scalaVersion := "2.11.6"
 
+//-Yno-adapted-args --> 避免scala编译器在方法参数上自作聪明的适配
+//-Xlint --> 已经包含Ywarn-adapted-args,只是警告还是能编译过去
 scalacOptions ++= Seq(
-  "-language:postfixOps",
-  "-language:implicitConversions",
-  "-language:reflectiveCalls",
-  "-language:higherKinds",
-  "-feature",
-  "-unchecked",
-  "-deprecation",
-  "-Xlint",
-  "-Xfatal-warnings"
+  "-language:postfixOps"
+  , "-language:implicitConversions"
+  , "-language:reflectiveCalls"
+  , "-language:higherKinds"
+  , "-feature"
+  , "-unchecked"
+  , "-deprecation"
+  , "-Xlint"
+  , "-Xfatal-warnings"
+  , "-encoding", "utf8"
+  , "-Yno-adapted-args"
+  //  , "-Ywarn-dead-code"
+  //  , "-Ywarn-unused"
+  //  , "-Ywarn-unused-import"
 )
 
 javaOptions += "-server -Xss1m -Xmx2g"
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
 
+libraryDependencies ++= Seq("org.specs2" %% "specs2-core" % "3.8.3" % "test")
+
 libraryDependencies += "org.scala-lang.modules" % "scala-async_2.11" % "0.9.6-RC2"
 
 libraryDependencies += "com.typesafe" % "config" % "1.3.0"
+
+libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.38"
 
 libraryDependencies ++= Seq(
   "com.twitter" %% "finagle-http" % "6.34.0",
@@ -41,10 +54,13 @@ libraryDependencies ++= Seq(
   "com.google.inject.extensions" % "guice-persist" % "4.0"
 )
 
-libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.38"
+libraryDependencies ++= Seq(
+  "org.scalikejdbc" %% "scalikejdbc" % "2.4.2",
+  "org.scalikejdbc" %% "scalikejdbc-test" % "2.4.2" % "test"
+)
 
-libraryDependencies += ("org.scalikejdbc" %% "scalikejdbc" % "2.3.5")
-  .excludeAll(ExclusionRule(organization = "commons-logging"))
+libraryDependencies += ("org.apache.kafka" % "kafka_2.10" % "0.8.2.0")
+  .exclude("org.apache.zookeeper", "zookeeper")
 
 libraryDependencies += "org.scalaz" %% "scalaz-core" % "7.2.2"
 
@@ -69,3 +85,14 @@ libraryDependencies ++= Seq(
 
 // a consistency, persistance and performance map using off-heap
 //libraryDependencies += "net.openhft" % "chronicle-map" % "3.8.0"
+
+val akkaverstion = "2.4.7"
+
+libraryDependencies ++= Seq(
+  "com.typesafe.akka" % "akka-actor_2.11" % akkaverstion,
+  "com.typesafe.akka" % "akka-slf4j_2.11" % akkaverstion,
+  "com.typesafe.akka" % "akka-remote_2.11" % akkaverstion,
+  "com.typesafe.akka" % "akka-agent_2.11" % akkaverstion,
+  "com.typesafe.akka" % "akka-cluster_2.11" % akkaverstion,
+  "com.typesafe.akka" % "akka-cluster-metrics_2.11" % akkaverstion
+)
