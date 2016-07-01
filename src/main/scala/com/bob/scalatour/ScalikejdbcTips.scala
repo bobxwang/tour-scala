@@ -1,7 +1,5 @@
 package com.bob.scalatour
 
-import com.bob.models.{AdminEntity, BBTestEntity}
-import org.joda.time.DateTime
 import scalikejdbc._
 
 case class Bank(id: Int, name: String)
@@ -41,10 +39,10 @@ object ScalikejdbcTips {
           if (x > 3) {
             throw new Exception("just test for rollback")
           }
-          val bb = BBTestEntity.create(Some(s"111${x}"), Some(s"eeee${x}"), Some(s"Ddd${x}"))
-          println(bb)
-          val am = AdminEntity.create(s"name${x}", "12345", 1, DateTime.now(), DateTime.now(), 1)
-          println(am)
+          //          val bb = BBTestEntity.create(Some(s"111${x}"), Some(s"eeee${x}"), Some(s"Ddd${x}"))
+          //          println(bb)
+          //          val am = AdminEntity.create(s"name${x}", "12345", 1, DateTime.now(), DateTime.now(), 1)
+          //          println(am)
         })
       })
     } catch {
