@@ -1,8 +1,9 @@
 package com.bob.scalatour
 
 import scalikejdbc._
+import scalikejdbc.mapper.{CodeGenerator, Model}
 
-case class Bank(id: Int, name: String)
+case class Bank(id: Int, name: String, age: Int = 12)
 
 object ScalikejdbcTips {
 
@@ -48,6 +49,19 @@ object ScalikejdbcTips {
     } catch {
       case e: Exception => println(e.getMessage)
     }
+  }
+
+  /**
+   * 根据表结构生成实体类
+   */
+  def generateModel(): Unit = {
+    val model = Model(DbConfigs.InTest.banka._3, DbConfigs.InTest.banka._1, DbConfigs.InTest.banka._2)
+    val table = model.table(tableName = "aaatbale")
+    table.map(f => {
+      val codeGenerator = new CodeGenerator(table = f)
+      codeGenerator.writeModel()
+      println(codeGenerator.modelAll())
+    })
   }
 
   def toMap(rs: WrappedResultSet): Map[String, Any] = {
