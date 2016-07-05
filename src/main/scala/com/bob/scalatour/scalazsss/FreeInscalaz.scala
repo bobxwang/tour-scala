@@ -1,4 +1,4 @@
-package com.bob.scalatour.scalaz
+package com.bob.scalatour.scalazsss
 
 import java.sql.Connection
 
