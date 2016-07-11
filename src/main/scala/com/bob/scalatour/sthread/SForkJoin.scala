@@ -33,7 +33,7 @@ object SForkJoin {
         case false => {
           val middle = (start + end) / 2
           val task1 = new CountTask(start, middle)
-          val task2 = new CountTask(middle, end)
+          val task2 = new CountTask(middle + 1, end)
           task1.fork()
           task2.fork()
           task1.join() + task2.join()
@@ -45,7 +45,7 @@ object SForkJoin {
   def main(args: Array[String]) {
 
     val forkJoinPool = new ForkJoinPool()
-    val task = new CountTask(1, 2000)
+    val task = new CountTask(1, 10000)
     val rs = forkJoinPool.submit(task)
     println(rs.get())
     if (task.isCompletedAbnormally) {
