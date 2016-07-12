@@ -2,7 +2,7 @@
 
 this is a tourist during myself learing [scala](http://www.scala-lang.org/)
 
-# Preposition
+# Prerequisite
 
 * basic knowledge of [sbt](http://www.scala-sbt.org/), a tool like maven in java world
 * basic knowledeg of [scalatest](http://www.scalatest.org/)
