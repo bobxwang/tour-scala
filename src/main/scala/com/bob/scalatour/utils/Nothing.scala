@@ -9,13 +9,63 @@ import scala.io.Source
 
 object Nothing {
 
-  implicit def writeToFile(fileName: String, data: String) = FileUtils.writeToFile(fileName, data)
+  def writeToFile(fileName: String, data: String) = FileUtils.writeToFile(fileName, data)
 
-  implicit def fileContent(fileName: String): String = FileUtils.fileContent(fileName)
+  def fileContent(fileName: String): String = FileUtils.fileContent(fileName)
 
   implicit val formats: Formats = new DefaultFormats {
     override def dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
   }
+
+  def diffTwoFiles(afile: String, bfile: String, savefile: String) = {
+
+    val fContent = fileContent(afile)
+    val hContent = fileContent(bfile)
+    val fuids = fContent.split(System.getProperty("line.separator", "\n")).toSeq.par.map(x => {
+      val p = x.split(",")
+      (p(0).trim, p(1).trim)
+    })
+    val huids = hContent.split(System.getProperty("line.separator", "\n")).toSeq.par.map(x => {
+      val p = x.split(",")
+      (p(0).trim, p(1).trim)
+    })
+    val diff = fuids diff huids
+    val sb = diff.foldLeft[StringBuilder](StringBuilder.newBuilder) {
+      (result, x) => {
+        result.append(s"${x._1},${x._2}\n")
+      }
+    }
+    writeToFile(savefile, sb.toString())
+  }
+
+  //    val fs = findAllConditionFiles(new File("/Users/bob/Works/enniu/JProject/resources-91-20160411")) {
+  //      _.getName.endsWith("json")
+  //    }
+  //    val cs = findAllConditionFiles(new File("/Users/bob/Works/enniu/JProject/risk-control-service-172.16.40.91/engine/src/main/resources")) {
+  //      _.getName.endsWith("json")
+  //    }
+  //    println(s"res-91-count is ${fs.size}")
+  //    println(s"coderes-91-count is ${cs.size}")
+  //    val d = cs.diff(fs)
+  //    d.foreach(println)
+
+  //    val fContent = fileContent("20160421UID.txt")
+  //        val hContent = fileContent("ok-uid.txt")
+  //    val fuids = fContent.split(System.getProperty("line.separator", "\n")).toSeq.par.map(x => {
+  //      val p = x.split(",")
+  //      (p(0).trim, p(1).trim)
+  //    })
+  //    val huids = hContent.split(System.getProperty("line.separator", "\n")).toSeq.par.map(x => {
+  //      val p = x.split(",")
+  //      (p(0).trim, p(1).replace("-", "/").trim)
+  //    })
+  //    val diff = fuids diff huids
+  //    val sb = diff.foldLeft[StringBuilder](StringBuilder.newBuilder) {
+  //      (result, x) => {
+  //        result.append(s"${x._1},${x._2}\n")
+  //      }
+  //    }
+  //    writeToFile("/Users/bob/Desktop/below.txt", sb.toString())
 
   def usingSourceIO(x: String) = {
     val p = x.split(",")

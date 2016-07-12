@@ -1,5 +1,7 @@
 package com.bob.scalatour
 
+import com.bob.scalatour.extens.TypeExtens._
+
 trait Node
 
 case class TreeNode(v: String, left: Node, right: Node) extends Node
@@ -36,10 +38,10 @@ object BasicTips {
     }
 
     //    findUser(19)(listUser)
-    //
     //    findUser2(6)(listUser2)
 
-    testYieldInFor
+    //    testYieldInFo
+
   }
 
   def listUser(): List[User] = {
@@ -86,8 +88,6 @@ object BasicTips {
         x
       })
     }
-
-    import com.bob.scalatour.extens.TypeExtens._
     time {
       val ab = for {
         file <- afun()

@@ -8,6 +8,13 @@ version := "1.0"
 
 scalaVersion := "2.11.6"
 
+initialize := {
+  assert(
+    Integer.parseInt(sys.props("java.specification.version").split("\\.")(1))
+      >= 7,
+    "Java 7 or above required")
+}
+
 //-Yno-adapted-args --> 避免scala编译器在方法参数上自作聪明的适配
 //-Xlint --> 已经包含Ywarn-adapted-args,只是警告还是能编译过去
 scalacOptions ++= Seq(
@@ -56,7 +63,8 @@ libraryDependencies ++= Seq(
 
 libraryDependencies ++= Seq(
   "org.scalikejdbc" %% "scalikejdbc" % "2.4.2",
-  "org.scalikejdbc" %% "scalikejdbc-test" % "2.4.2" % "test"
+  "org.scalikejdbc" %% "scalikejdbc-test" % "2.4.2" % "test",
+  "org.scalikejdbc" %% "scalikejdbc-mapper-generator-core" % "2.4.2"
 )
 
 libraryDependencies += ("org.apache.kafka" % "kafka_2.10" % "0.8.2.0")
@@ -85,6 +93,10 @@ libraryDependencies ++= Seq(
 
 // a consistency, persistance and performance map using off-heap
 //libraryDependencies += "net.openhft" % "chronicle-map" % "3.8.0"
+
+libraryDependencies += "com.github.pathikrit" %% "better-files" % "2.16.0"
+
+libraryDependencies += "com.rockymadden.stringmetric" %% "stringmetric-core" % "0.27.4"
 
 val akkaverstion = "2.4.7"
 
