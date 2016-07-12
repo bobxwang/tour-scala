@@ -2,7 +2,7 @@ package com.bob.scalatour
 
 import com.bob.scalatour.extens.TypeExtens._
 
-class ScalaTips {
+object ScalaTips {
 
   /**
    * "Side effects"是这样一个动作，除了返回一个值外，外部函数或者表达式还观察到此动作还有以下行为之一:
@@ -65,4 +65,16 @@ class ScalaTips {
   /**
    * 缺点 --> 各种高级语法，隐转，不知所云，大量生成临时对象
    */
+
+  def compose[A, B, C](f: B => C, g: A => B): A => C = a => f(g(a))
+
+  def curry[A, B, C](f: (A, B) => C): A => (B => C) = a => b => f(a, b)
+
+  def main(args: Array[String]) {
+    val a = compose[Int, Int, Int]((x: Int) => x + 1, (x: Int) => x + 1)
+    println(a(2))
+
+    val b = curry[Int, Int, Int]((x, y) => (x + 100) * y)
+    println(b(2)(3))
+  }
 }

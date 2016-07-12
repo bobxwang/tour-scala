@@ -2,6 +2,8 @@ package com.bob.scalatour
 
 import com.bob.scalatour.extens.TypeExtens._
 
+import scala.{sys => ssys}
+
 trait Node
 
 case class TreeNode(v: String, left: Node, right: Node) extends Node
@@ -63,6 +65,31 @@ object BasicTips {
   }
 
   /**
+   * 算n的阶乘
+   * @param n
+   * @return
+   */
+  def f(n: Int): Int = {
+    @annotation.tailrec
+    def go(n: Int, acc: Int): Int = {
+      if (n <= 0) acc else go(n - 1, n * acc)
+    }
+    go(n, 1)
+  }
+
+  /**
+   * 传入函数来满足多态
+   * @param name
+   * @param n
+   * @param f 需要一个入参为Int，出参也是Int的函数
+   * @return
+   */
+  def formatResult(name: String, n: Int, f: Int => Int) = {
+    val msg = "The %s of %d is %d."
+    msg.format(n, f(n))
+  }
+
+  /**
    * 柯里化同时将函数做为一个入参
    * @param uid
    * @param f
@@ -104,7 +131,9 @@ object BasicTips {
       })
       ab.foreach(x => println(x))
     }
-
   }
 
+  def if2[A](cond: Boolean, onTrue: => A, onFalse: => A): A = if (cond) onTrue else onFalse
+
+  val if2D = if2(false, ssys.error("fail"), 3)
 }
