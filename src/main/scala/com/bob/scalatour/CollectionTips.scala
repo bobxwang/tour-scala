@@ -35,4 +35,12 @@ object CollectionTips {
     println(seq.find(_ == findValue) != None)
     seq.find(_ == findValue).isDefined
   }
+
+  /**
+   * 返转列表
+   * @param xs List(1,2,3,4,5,6,7)
+   * @tparam T
+   * @return List(7,6,5,4,3,2,1)
+   */
+  def reverseLeft[T](xs: List[T]) = (List[T]() /: xs) { (x, y) => y :: x }
 }
