@@ -1,5 +1,9 @@
 package com.bob.scalatour
 
+import java.util.concurrent.Executors
+
+import com.twitter.util.NonFatal
+
 import scala.concurrent._
 import ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
@@ -45,6 +49,48 @@ object FutureTips {
     // 而Promise可以看作一个可写的，单次指派的容器，可以完成一个future。
     // Promise是单次指派的，你不能调用success或failure两次，否则会抛出IllegalStateException。
     // val p = Promise[Friend]
+  }
+
+  def aCompletePromiseUsingSuccess(num: Int): Future[Int] = {
+    val promise = Promise[Int]()
+    //    promise.success(num)
+    promise.complete(Success(num))
+    promise.future
+  }
+
+  val somePool = Executors.newFixedThreadPool(2)
+
+  def sumOfThreeNumbersSequentialMap(): Future[Int] = {
+    Future {
+      Thread.sleep(1000)
+      1
+    }.flatMap(x => {
+      Future {
+        Thread.sleep(1000)
+        2
+      }.flatMap(y => {
+        Future {
+          Thread.sleep(1000)
+          3
+        }.map(z => x + y + z)
+      })
+    })
+  }
+
+  def someExternalDelayedCalculation(f: () => Int): Future[Int] = {
+    val promise = Promise[Int]()
+    val thisIsWhereWcCallSomeExternalComputation = new Runnable {
+      override def run(): Unit = {
+        promise.complete {
+          try (Success(f()))
+          catch {
+            case NonFatal(msg) => Failure(msg)
+          }
+        }
+      }
+    }
+    somePool.execute(thisIsWhereWcCallSomeExternalComputation)
+    promise.future
   }
 
   def usingComplete(f: Future[List[Friend]]) = {

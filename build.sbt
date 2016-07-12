@@ -70,7 +70,10 @@ libraryDependencies ++= Seq(
 libraryDependencies += ("org.apache.kafka" % "kafka_2.10" % "0.8.2.0")
   .exclude("org.apache.zookeeper", "zookeeper")
 
-libraryDependencies += "org.scalaz" %% "scalaz-core" % "7.2.2"
+libraryDependencies ++= Seq(
+  "org.scalaz" %% "scalaz-core" % "7.2.2",
+  "org.scalaz" %% "scalaz-effect" % "7.2.2"
+)
 
 libraryDependencies += ("com.netflix.eureka" % "eureka-client" % "1.1.147")
   .exclude("javax.ws.rs", "jsr311-api")
