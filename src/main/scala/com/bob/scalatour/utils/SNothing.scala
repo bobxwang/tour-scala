@@ -7,7 +7,7 @@ import org.json4s.native.JsonMethods._
 
 import scala.io.Source
 
-object Nothing {
+object SNothing {
 
   def writeToFile(fileName: String, data: String) = FileUtils.writeToFile(fileName, data)
 

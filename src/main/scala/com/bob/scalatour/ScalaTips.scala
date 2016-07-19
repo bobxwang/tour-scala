@@ -77,4 +77,52 @@ object ScalaTips {
     val b = curry[Int, Int, Int]((x, y) => (x + 100) * y)
     println(b(2)(3))
   }
+
+  /**
+   * Any 超类，相当于java中的Object
+   * AnyVal => 每个内建值类的父类，Byte,Short,Char,Int,Long,Float,Double,Boolean,Unit,值在这都被定义成final还是abstract,
+   * 故不能new,在需要的时候，比如调用toString方法时，scala会自动对其进行装箱动作，透明的转成java.lang.Integer,
+   * scala中的相等操作==被设计为对类型表达透明，不像java，对字符串等引用类型需要用equals
+   * AnyRef =>
+   *
+   * Null => Null类是null引用对象的类型，是每个引用类(继承自AnyRef)的子类，不兼容值类型
+   * Nothing => 是任何其它类型的子类型，其存在的一个用处是它标明了不正常的终止
+   */
+
+  /**
+   * trait
+   * 如果希望在java中被继承，则定义与抽象类，因为在java中继承特质是很笨拙的
+   */
+
+  /**
+   * 隐式引用
+   * 任何scala程序默认引入java.lang._; scala._; Predef._三个包，引入包时，出现在后面位置的引用将覆盖前面的引用
+   */
+
+  /**
+   * 保护成员
+   * scala比java更严格，在scala里，保护成员只在定义了成员的类的子类可以访问，而java中还允许在同一个包的其它类中进行访问
+   * private[X]/protected[X]，表示”直到“X的私有或保护，这里X指代某个所属的包，类或单例对象
+   * private[this] => 被这标记的定义仅能在包含了定义的同一个对象中被访问，此定义被称为是对象私有的(object-private)
+   */
+
+  /**
+   * 类型推断是基于流的，在m(args)的方法调用中，类型推断器首先检查方法m是否有已知类型，有，那么这个类型将被用来做参数预期类型推断
+   */
+
+  /**
+   * 所有能产生yield结果的for表达式都会被编译器转译为高阶方法map,filtermap及filter的组合调用
+   * 所有不带yield的for循环都会被转译为仅对高阶函数filter和foreach的调用
+   * for (seq) yield expr => seq是由生成器，定义及过滤器组成的序列，以分号分隔
+   * demo:
+   * for (p <- persons; n = p.name; if (n startsWith "To") ) yield n
+   * 也可以这样:
+   * for {
+   * p <- persons;          ==> 生成器
+   * n = p.name;            ==> 定义
+   * if (n startWith "To")  ==> 过滤器
+   * } yield n
+   *
+   * for (x <- List(1,2); y <- List("one","two")) yield (x,y)  => 结果是: List((1,"one"),(1,"two"),(2,"one"),(2,"two"))
+   */
 }

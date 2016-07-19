@@ -1,10 +1,56 @@
 package com.bob.scalatour.structure
 
-sealed trait SList[+A]
+import scala.collection.mutable.ListBuffer
 
-case object SNil extends SList[Nothing]
+sealed trait SList[+A] {
+  def isEmpty: Boolean
 
-case class SCons[+A](head: A, tail: SList[A]) extends SList[A]
+  def head: A
+
+  def tail: SList[A]
+
+  def length: Int = if (isEmpty) 0 else 1 + tail.length
+
+  def drop(n: Int): SList[A] = {
+    if (isEmpty) SNil
+    else if (n <= 0) this
+    else tail.drop(n - 1)
+  }
+
+  //  def map[B](f: A => B): SList[B] = {
+  //    if (isEmpty) SNil
+  //    else f(head) :: tail.map(f)
+  //  }
+  //
+  //  def realMap[B](f: A => B) = {
+  //    val b = new ListBuffer[B]
+  //    var these = this
+  //    while (!these.isEmpty) {
+  //      b += f(these.head)
+  //      these = these.tail
+  //    }
+  //    b.toList
+  //  }
+
+  /**
+   * @param x
+   * @tparam U U必须是A的超类或A本身
+   * @return
+   */
+  //  def ::[U >: A](x: U): SList[U] = new scala.::(x, this)
+}
+
+case object SNil extends SList[Nothing] {
+  override def isEmpty: Boolean = true
+
+  override def tail: SList[Nothing] = throw new NoSuchElementException("tail of empty list")
+
+  override def head: Nothing = throw new NoSuchElementException("head of empty list")
+}
+
+case class SCons[+A](head: A, tail: SList[A]) extends SList[A] {
+  override def isEmpty: Boolean = false
+}
 
 object SList {
 
@@ -52,7 +98,6 @@ object SList {
     _ + _
   }
 
-  def map[A, B](l: List[A])(f: A => B): List[B] = ???
 
   def flatmap[A, B](l: List[A])(f: A => List[B]): List[B] = ???
 }
