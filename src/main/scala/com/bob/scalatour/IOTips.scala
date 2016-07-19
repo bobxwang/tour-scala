@@ -209,8 +209,8 @@ object IOTips {
         fcontent.split(System.getProperty("line.separator", "\n")).toList.par.foreach(y => {
           try {
             val temp = y.trim.split(",")
-            val udate = ""
-            val uid = temp(0)
+            val udate = "2016-06-30"
+            val uid = temp(1)
             val content = s"${uid},${together2result(SRibbonClient.run(uid, udate))}\n"
             writeToFile(s"${currentPath}/${filename}-ok-online.txt", content)
           } catch {
