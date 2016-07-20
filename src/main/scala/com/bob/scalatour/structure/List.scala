@@ -54,17 +54,6 @@ case class SCons[+A](head: A, tail: SList[A]) extends SList[A] {
 
 object SList {
 
-  def sum(ints: SList[Int]): Int = ints match {
-    case SNil => 0
-    case SCons(x, xs) => x + sum(xs)
-  }
-
-  def product(ds: SList[Double]): Double = ds match {
-    case SNil => 0
-    case SCons(0.0, _) => 0.0
-    case SCons(x, xs) => x * product(xs)
-  }
-
   def apply[A](as: A*): SList[A] = {
     if (as.isEmpty) SNil else SCons(as.head, apply(as.tail: _*))
   }
@@ -94,9 +83,36 @@ object SList {
       case SCons(x, xs) => f(x, foldRight(xs, z)(f))
     }
 
+  def sum(ints: SList[Int]): Int = ints match {
+    case SNil => 0
+    case SCons(x, xs) => x + sum(xs)
+  }
+
+  def sum2(ns: SList[Int]) = foldRight(ns, 0)(_ + _)
+
+  def product(ds: SList[Double]): Double = ds match {
+    case SNil => 0
+    case SCons(0.0, _) => 0.0
+    case SCons(x, xs) => x * product(xs)
+  }
+
+  def product2(ds: SList[Double]): Double = foldRight(ds, 0.0)((x, y) => x * y)
+
   val fr = foldRight(SList(1, 2, 3, 4, 5), 0) {
     _ + _
   }
+
+  def tail[A](l: SList[A]): SList[A] =
+    l match {
+      case SNil => sys.error("tail of empty list")
+      case SCons(_, t) => t
+    }
+
+  def setHead[A](l: SList[A], h: A): SList[A] =
+    l match {
+      case SNil => sys.error("setHead on empty list")
+      case SCons(_, t) => SCons(h, t)
+    }
 
 
   def flatmap[A, B](l: List[A])(f: A => List[B]): List[B] = ???
