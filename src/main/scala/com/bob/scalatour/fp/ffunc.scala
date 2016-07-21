@@ -1,4 +1,4 @@
-package com.bob.scalatour.ffunc
+package com.bob.scalatour.fp
 
 case class Box[A](a: A)
 
@@ -27,14 +27,17 @@ object SBox {
 
 object ffunc {
 
+  // Functor
   def map[A, B](f: A => B): Box[A] => Box[B] = {
     ba: Box[A] => Box(f(ba.a))
   }
 
+  // Monad
   def flatMap[A, B](f: A => Box[B]): Box[A] => Box[B] = {
     ba: Box[A] => f(ba.a)
   }
 
+  // Applicative
   def apply[A, B](f: Box[A => B]): Box[A] => Box[B] = {
     ba: Box[A] => Box(f.a(ba.a))
   }
@@ -127,8 +130,8 @@ object omonadImp {
   trait Applicative[F[_]] extends Functor[F] {
     def unit[A](a: A): F[A]
 
-    def map2[A, B, C](ma: F[A], mb: F[B])(f: (A, B) => C): F[C] = {
-      apply(mb)(map(ma)(f.curried))
+    def map2[A, B, C](fa: F[A], fb: F[B])(f: (A, B) => C): F[C] = {
+      apply(fb)(map(fa)(f.curried))
     }
 
     /*

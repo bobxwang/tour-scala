@@ -1,7 +1,5 @@
 package com.bob.scalatour.structure
 
-import scala.collection.mutable.ListBuffer
-
 sealed trait SList[+A] {
   def isEmpty: Boolean
 
@@ -10,12 +8,6 @@ sealed trait SList[+A] {
   def tail: SList[A]
 
   def length: Int = if (isEmpty) 0 else 1 + tail.length
-
-  def drop(n: Int): SList[A] = {
-    if (isEmpty) SNil
-    else if (n <= 0) this
-    else tail.drop(n - 1)
-  }
 
   //  def map[B](f: A => B): SList[B] = {
   //    if (isEmpty) SNil
@@ -83,6 +75,12 @@ object SList {
       case SCons(x, xs) => f(x, foldRight(xs, z)(f))
     }
 
+  @annotation.tailrec
+  def foldLeft[A, B](l: SList[A], z: B)(f: (B, A) => B): B = l match {
+    case SNil => z
+    case SCons(h, t) => foldLeft(t, f(z, h))(f)
+  }
+
   def sum(ints: SList[Int]): Int = ints match {
     case SNil => 0
     case SCons(x, xs) => x + sum(xs)
@@ -114,6 +112,45 @@ object SList {
       case SCons(_, t) => SCons(h, t)
     }
 
+  def drop[A](l: SList[A], n: Int): SList[A] = {
+    if (n <= 0) l
+    else {
+      l match {
+        case SNil => SNil
+        case SCons(_, t) => drop(t, n - 1)
+      }
+    }
+  }
 
-  def flatmap[A, B](l: List[A])(f: A => List[B]): List[B] = ???
+  def dropWhile[A](l: SList[A], f: A => Boolean): SList[A] = l match {
+    case SCons(h, t) if f(h) => dropWhile(t, f)
+    case _ => l
+  }
+
+  def init[A](l: SList[A]): SList[A] = l match {
+    case SNil => sys.error("init of empty list")
+    case SCons(_, SNil) => SNil
+    case SCons(h, t) => SCons(h, init(t))
+  }
+
+  def init2[A](l: SList[A]): SList[A] = {
+    import scala.collection.mutable.ListBuffer
+    val buf = new ListBuffer[A]
+    @annotation.tailrec
+    def go(cur: SList[A]): SList[A] = cur match {
+      case SNil => sys.error("init of empty list")
+      case SCons(_, SNil) => SList(buf.toList: _*)
+      case SCons(h, t) => buf += h; go(t)
+    }
+    go(l)
+  }
+
+  def concat[A](l: SList[SList[A]]): SList[A] = foldRight(l, SNil: SList[A])(append)
+
+  def length[A](l: SList[A]): Int = foldRight(l, 0)((_, y) => y + 1)
+
+  def map[A, B](l: SList[A])(f: A => B): SList[B] = foldRight(l, SNil: SList[B])((h, t) => SCons(f(h), t))
+
+  def flatmap[A, B](l: SList[A])(f: A => SList[B]): SList[B] = concat(map(l)(f))
+
 }

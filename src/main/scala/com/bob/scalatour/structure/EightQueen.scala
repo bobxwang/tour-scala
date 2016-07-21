@@ -55,18 +55,4 @@ object EightQueen {
       (q1._1 - q2._1).abs == (q1._2 - q2._2).abs // 对角线
   }
 
-  object Email {
-    def apply(user: String, domain: String) = user + "@" + domain
-
-    /**
-     * 抽取器
-     * @param str
-     * @return
-     */
-    def unapply(str: String): Option[(String, String)] = {
-      val parts = str split "@"
-      if (parts.length == 2) Some(parts(0), parts(1)) else None
-    }
-  }
-
 }

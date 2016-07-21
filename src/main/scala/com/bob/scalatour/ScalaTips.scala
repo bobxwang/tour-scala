@@ -66,18 +66,6 @@ object ScalaTips {
    * 缺点 --> 各种高级语法，隐转，不知所云，大量生成临时对象
    */
 
-  def compose[A, B, C](f: B => C, g: A => B): A => C = a => f(g(a))
-
-  def curry[A, B, C](f: (A, B) => C): A => (B => C) = a => b => f(a, b)
-
-  def main(args: Array[String]) {
-    val a = compose[Int, Int, Int]((x: Int) => x + 1, (x: Int) => x + 1)
-    println(a(2))
-
-    val b = curry[Int, Int, Int]((x, y) => (x + 100) * y)
-    println(b(2)(3))
-  }
-
   /**
    * Any 超类，相当于java中的Object
    * AnyVal => 每个内建值类的父类，Byte,Short,Char,Int,Long,Float,Double,Boolean,Unit,值在这都被定义成final还是abstract,
@@ -125,4 +113,22 @@ object ScalaTips {
    *
    * for (x <- List(1,2); y <- List("one","two")) yield (x,y)  => 结果是: List((1,"one"),(1,"two"),(2,"one"),(2,"two"))
    */
+
+  object Email {
+    def apply(user: String, domain: String) = user + "@" + domain
+
+    /**
+     * 抽取器
+     * @param str
+     * @return
+     */
+    def unapply(str: String): Option[(String, String)] = {
+      val parts = str split "@"
+      if (parts.length == 2) {
+        val a = (parts(0), parts(1))
+        Some(a)
+      } else None
+    }
+  }
+
 }

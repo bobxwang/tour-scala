@@ -41,18 +41,28 @@ object Quick {
     go(0, 0, as.length - 1)
   }
 
-  def isSorted[A](as: Array[A], gt: (A, A) => Boolean): Boolean = ???
+  def isSorted[A](as: Array[A], gt: (A, A) => Boolean): Boolean = {
+    @annotation.tailrec
+    def go(n: Int): Boolean = {
+      if (n >= as.length - 1) true
+      else {
+        println(as(n))
+        println(as(n + 1))
+        if (gt(as(n), as(n + 1))) false else go(n + 1)
+      }
+    }
+    go(0)
+  }
 
-  /**
-   * 接受一个参数，一个函数需要两个入参，同时返回一个需要一个入参数的函数
-   * @param a
-   * @param f
-   * @tparam A
-   * @tparam B
-   * @tparam C
-   * @return
-   */
-  def partial[A, B, C](a: A, f: (A, B) => C): B => C = ???
+  def findFirst[A](as: Array[A], p: A => Boolean): Int = {
+    @annotation.tailrec
+    def loop(n: Int): Int = {
+      if (n >= as.length) -1
+      else if (p(as(n))) n
+      else loop(n + 1)
+    }
 
+    loop(0)
+  }
 
 }
