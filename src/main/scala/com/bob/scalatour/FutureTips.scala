@@ -18,6 +18,19 @@ object FutureTips {
 
   def main(args: Array[String]): Unit = {
 
+    val ab: List[Future[Int]] = List(Future[Int](1), Future[Int] {
+      4
+    }, Future[Int] {
+      5
+    })
+    val abc: Future[List[Int]] = Future.sequence(ab)
+    abc.map(x => x.map(y => println(y)))
+    val futureList: Future[List[Int]] = Future.traverse((1 to 100).toList)(x => Future(x * 2 - 1))
+    futureList.foreach(x => println(x.sum))
+
+    // Future.sequences可以将一个List[Future[Int]]转成一个Future[List[Int]]
+    // 而Future.traverse需要两个入参，一个是T[A]，还有一个是A=>Future[B]，返回一个Future[T[B]]
+
     val f: Future[List[Friend]] = Future {
 
       (1 to 10).map(x => Friend(s"name${x}", s"phone${x}")).toList

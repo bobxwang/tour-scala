@@ -4,13 +4,13 @@ import java.io._
 import java.text.SimpleDateFormat
 import java.util.concurrent.TimeUnit
 
+import com.bob.scalatour.extens.TypeExtens._
 import com.bob.scalatour.netflix.SRibbonClient
 import com.bob.scalatour.utils.FileUtils
 import okhttp3.OkHttpClient.Builder
 import okhttp3.{OkHttpClient, Request => OKRequest}
 import org.json4s._
 import org.json4s.native.JsonMethods._
-import com.bob.scalatour.extens.TypeExtens._
 
 /**
  * Created by bob on 16/4/13.
