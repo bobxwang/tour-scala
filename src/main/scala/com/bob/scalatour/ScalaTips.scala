@@ -1,5 +1,7 @@
 package com.bob.scalatour
 
+import java.net.{Socket, SocketAddress}
+
 import com.bob.scalatour.extens.TypeExtens._
 
 object ScalaTips {
@@ -10,6 +12,12 @@ object ScalaTips {
    * 对外部变量有修改
    * 外部对象的状态有改变
    * 抛出异常
+   *
+   * lazy val a = "ea" ==> lazy成员是线程安全的
+   */
+
+  /**
+   * 缺点 --> 各种高级语法，隐转，不知所云，大量生成临时对象，但Hotsport的分代垃圾收集通常使这不成问题，因为短暂的垃圾在大多情况下会被有效释放
    */
 
   /**
@@ -36,6 +44,10 @@ object ScalaTips {
    * callByName(something()) --> it will display calling something x1=1 calling something x2=2
    * This is because call-by-value functions compute the passed-in expression's value before calling the function, thus the same value is accessed every time.
    * However, call-by-name functions recompute the passed-in expression's value every time it is accessed.
+   *
+   * 最好只在控制结构中使用传名调用，调用者明显传递的是一段代码块block而非一个确定的计算结果，传名参数须放在参数列表的最后一位，当使用传名调用时，
+   * 确保方法名称让调用者明显感知到方法参数是传名参数，如下所示:
+   * class SSLConnector(mkEngine: ()=> SSLEngine)
    */
 
   /**
@@ -60,10 +72,6 @@ object ScalaTips {
    * def amethod(x:Int):Int = x + 10
    * val afunction = (x:Int) => x + 10
    * 将方法转成函数，只需要在参数位置用 _来个替换，val tofunc = amethod _
-   */
-
-  /**
-   * 缺点 --> 各种高级语法，隐转，不知所云，大量生成临时对象
    */
 
   /**
@@ -131,4 +139,41 @@ object ScalaTips {
     }
   }
 
+  /**
+   * 类型系统首要目的是检测程序错误，提供一个静态检测的有限形式，使用类型增加代码清晰度，虽然scala的迷人的类型系统，但是一个学术问题，请避免之。
+   */
+
+  type SocketFactory = SocketAddress => Socket
+  val addr2Inet: SocketAddress => Long = x => 1l
+  val inet2Socket: Long => Socket = x => new Socket()
+  val factory: SocketFactory = addr2Inet andThen inet2Socket
+
+  trait Bar
+
+  trait Baz
+
+  class Foo {}
+
+  def foobb(): Foo with Bar = new Foo with Bar with Baz {
+    // 在声明返回类型限制可见性，foobb方法的调用者会看到以返回实例(Foo with Bar)的受限视图
+  }
+
+
+  /**
+   * 由于类型擦除，编译期存在的类型信息在编译后不存在了，在程序运行时不能获取该信息，但某些场景可能需要得到编译期的类型信息，scala可以做到，主要是
+   * 通过Manifest和TypeTag来保存类型信息并在运行时使用该信息。
+   * Manifest在scala.reflect包中，而TypeTag在scala.reflect.runtime.universe包中，TypeTag可以替代前者，功能更强大，可能过typeOf[]获得
+   */
+
+  /**
+   * 不要使用隐式转换对两个相似的数据类型做自动转换，如List和Stream，要显示地做如果要转的话
+   */
+
+  /**
+   * 总使用最简单的集合来满足您的需求，优先使用不可变集合
+   */
+
+  /**
+   * 当操作多个futures时，Future.select/join/collect应该被组合写出通用模式
+   */
 }

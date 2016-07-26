@@ -59,6 +59,14 @@ class ClassTest extends FunSuite {
         case _ => throw new IllegalArgumentException("Not a car!")
       }
     }
+
+    // here we no need to cars map { item => item match {} }
+    cars map {
+      case p: Porsche => assert(p.drive == "driving" && p.sound == "prrrr")
+      case c: Corvette => assert(c.drive == "driving" && c.sound == "woosh")
+      case m: Maserati => assert(m.drive == "driving" && m.sound == "grrrr")
+      case _ => throw new IllegalArgumentException("Not a car!")
+    }
   }
 
   test("constructors") {

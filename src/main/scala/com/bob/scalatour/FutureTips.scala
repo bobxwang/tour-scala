@@ -11,6 +11,7 @@ import scala.util.{Failure, Success}
 /**
  * 一个Future实例总是和一个(也只能是一个)Promise实例关联在一起，
  * 如果你在REPL里调用future方法会发现返回的也是Promise
+ * Future持有一个尚未完成运算结果的promise(一个简单的容器，占位符)，包含三个状态(pending,failed,completed)
  */
 object FutureTips {
 

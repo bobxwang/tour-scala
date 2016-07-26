@@ -9,6 +9,10 @@ public class SNothing {
 
     public static void main(String[] args) {
 
+        int x = 4;
+        java.util.Date date = (x > 4) ? new A() : new B();
+
+
         List<Integer> l = new ArrayList<>();
         l.add(1);
         l.add(2);
@@ -32,6 +36,18 @@ public class SNothing {
         ls.add("51");
         Class<?> lsclass = ls.getClass();
         System.out.println(lsclass);
+    }
 
+    static class A extends java.util.Date {
+
+        public void test () {
+            short s1 = 1;
+            // s1 = s1 + 1; it required int but found short
+            s1 += 1; // this is ok
+            System.out.println(s1);
+        }
+    }
+
+    static class B extends java.util.Date {
     }
 }
