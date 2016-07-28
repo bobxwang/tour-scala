@@ -12,6 +12,16 @@ import scala.collection.{SortedMap, SortedSet, mutable}
  */
 class CollectionTest extends FunSuite {
 
+  /**
+   * fold is more generic than reduce, reduceLeft is just a convenience method, it is equivalent to
+   * list.tail.foldLeft(list.head)(_)
+   * 下面是两个方法签名
+   * def foldLeft [B] (z: B)(f: (B, A) => B): B
+   * def reduceLeft [B >: A] (f: (B, A) => B): B
+   * 还有个scan/scanLeft系列，跟上面不一样的是，scan会把返回的东西给扁平化，即不是返回一个数，而是每步运算的值做为一个List的元素返回
+   */
+
+
   test("basiclist") {
     def toList(v: Int) = List(v - 1, v, v + 1)
     val list = List(1, 2, 3)
