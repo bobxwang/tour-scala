@@ -6,6 +6,7 @@ trait SBox[A] {
   def get: A
 
   // 如果SBox是Functor，就必须实现map函数, Functor其实就是可以对包装过的值做处理的函数
+  // yeah,this is exactly what a functor is,a value with context,that contains an inner value with an associated context
   def map[B](f: A => B): SBox[B] = SBox(f(get))
 
   // 有了apply后，那么，SBOX就是一个Applicative，Applicative extends Functor，
