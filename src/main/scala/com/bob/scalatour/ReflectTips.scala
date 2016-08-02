@@ -35,17 +35,17 @@ object ReflectTips {
       val subType = theType.asInstanceOf[ru.TypeRef].args(0) // subType value is Int
       println(s"sub type is: ${subType}")
 
-      theType match {
-        case ru.PolyType(typeParams, resultType) => println(s"poly $typeParams, $resultType")
-        case ru.TypeRef(pre, sym, args) => {
-          println(s"typeref $pre, $sym, $args")
-          val subtype = args(0)
-          println("Sub:" + subtype)
-          showType(subtype.typeSymbol.typeSignature)
-          showType(subtype)
-        }
-        case _ =>
-      }
+//      theType match {
+//        case ru.PolyType(typeParams, resultType) => println(s"poly $typeParams, $resultType")
+//        case ru.TypeRef(pre, sym, args) => {
+//          println(s"typeref $pre, $sym, $args")
+//          val subtype = args(0)
+//          println("Sub:" + subtype)
+//          showType(subtype.typeSymbol.typeSignature)
+//          showType(subtype)
+//        }
+//        case _ =>
+//      }
     }
 
     // using decls to get the method in this type

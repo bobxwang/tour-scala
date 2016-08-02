@@ -209,9 +209,9 @@ object IOTips {
         fcontent.split(System.getProperty("line.separator", "\n")).toList.par.foreach(y => {
           try {
             val temp = y.trim.split(",")
-            val udate = "2016-06-30"
-            val uid = temp(1)
-            val content = s"${uid},${together2result(SRibbonClient.run(uid, udate))}\n"
+            val udate = temp(1)
+            val uid = temp(0)
+            val content = s"${y.trim},${together2result(SRibbonClient.run(uid, udate))}\n"
             writeToFile(s"${currentPath}/${filename}-ok-online.txt", content)
           } catch {
             case e: Exception => {
@@ -222,26 +222,44 @@ object IOTips {
       }
       case _ => {
         // 访问91
-        fcontent.split(System.getProperty("line.separator", "\n")).toList.par.foreach(y => {
+        //        fcontent.split(System.getProperty("line.separator", "\n")).toList.par.foreach(y => {
+        //          try {
+        //            val temp = y.trim.split(",")
+        //            val udate = temp(1).trim.split("-")
+        //            val month = if (udate(1).length == 1) s"0${udate(1)}" else udate(1)
+        //            val day = if (udate(2).length == 1) s"0${udate(2)}" else udate(2)
+        //            val querydate = s"${udate(0)}-${month}-${day}"
+        //            val uid = temp(0)
+        //            val crequest = requestBuild.url(s"http://172.16.40.91:8090/calculator/users/together?userId=${uid}&date=${querydate}&bbb=bbb").build()
+        //            val cresponse = client.newCall(crequest).execute()
+        //            if (cresponse.isSuccessful) {
+        //              val content = s"${y.trim},${together2result(cresponse.body.string)}\n"
+        //              writeToFile(s"${currentPath}/${filename}-ok-91.txt", content)
+        //            } else {
+        //              writeToFile(s"${currentPath}/${filename}-error-91.txt", s"${y.trim} :: has error ${cresponse.code}\n")
+        //            }
+        //          } catch {
+        //            case e: Exception => {
+        //              writeToFile(s"${currentPath}/${filename}-error-91.txt", s"${y.trim} :: has error ${e.getMessage}\n")
+        //            }
+        //          }
+        //        })
+        fcontent.split(System.getProperty("line.separator", "\n")).toList.foreach(y => {
           try {
             val temp = y.trim.split(",")
-            val udate = temp(1).trim.split("-")
-            val month = if (udate(1).length == 1) s"0${udate(1)}" else udate(1)
-            val day = if (udate(2).length == 1) s"0${udate(2)}" else udate(2)
-            val querydate = s"${udate(0)}-${month}-${day}"
             val uid = temp(0)
-            val crequest = requestBuild.url(s"http://172.16.40.91:8090/calculator/users/together?userId=${uid}&date=${querydate}&bbb=bbb").build()
+            val date = temp(1)
+            val crequest = requestBuild.url(s"http://172.16.40.91:8090/calculator/users/agent?userId=${uid}&date=${date}&bbb=bbb").build()
             val cresponse = client.newCall(crequest).execute()
             if (cresponse.isSuccessful) {
-              val content = s"${y.trim},${together2result(cresponse.body.string)}\n"
+              val jv: JValue = parse(cresponse.body().string())
+              val content = s"${y.trim},${(jv \ "agent").extractOrElse[Double](-1000.0d)}\n"
               writeToFile(s"${currentPath}/${filename}-ok-91.txt", content)
             } else {
               writeToFile(s"${currentPath}/${filename}-error-91.txt", s"${y.trim} :: has error ${cresponse.code}\n")
             }
           } catch {
-            case e: Exception => {
-              writeToFile(s"${currentPath}/${filename}-error-91.txt", s"${y.trim} :: has error ${e.getMessage}\n")
-            }
+            case e: Exception => writeToFile(s"${currentPath}/${filename}-error-91.txt", s"${y.trim} :: has error ${e.getMessage}\n")
           }
         })
       }

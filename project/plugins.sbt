@@ -4,8 +4,6 @@ resolvers += Resolver.url("https://github.com/sbt/sbt-assembly.git")
 
 resolvers += Resolver.url("https://github.com/jrudolph/sbt-dependency-graph.git")
 
-resolvers += "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
-
 resolvers += Resolver.url("https://github.com/google/guice.git")
 
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.1")

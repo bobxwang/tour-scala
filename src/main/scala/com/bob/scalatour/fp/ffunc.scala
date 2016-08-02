@@ -24,6 +24,12 @@ object SBox {
   def apply[A](a: A) = new SBox[A] {
     override def get: A = a
   }
+
+  /**
+   * Monad is a structure that represents sequential computations.
+   * The type of monad defines the means to chain the various operations together or we can say the nesting of functions of same type. This allows the programmer to build the pipleline, which is used to process the data in a sequence of steps.
+   * In the monad the output of a calculation at any step is the input to the other calculation which runs as a parent to the current step. So each action is decorated with additional processing rules provided by the monad.
+   */
 }
 
 object ffunc {

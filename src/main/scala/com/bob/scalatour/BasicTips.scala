@@ -121,6 +121,10 @@ object BasicTips {
         afile <- aafun()
       } yield (file, afile)
       ab.foreach(x => println(x))
+
+      /** 上面代码可以理解为
+        * val ac = afun.flatMap(x=>aafun.map(y=>(x,y)).foreach(x=>println(x))
+        */
     }
 
     time {

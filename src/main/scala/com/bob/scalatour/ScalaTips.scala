@@ -176,4 +176,5 @@ object ScalaTips {
   /**
    * 当操作多个futures时，Future.select/join/collect应该被组合写出通用模式
    */
+  
 }
