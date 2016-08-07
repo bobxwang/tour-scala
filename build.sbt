@@ -62,6 +62,11 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies ++= Seq(
+  "net.sourceforge.htmlunit" % "htmlunit-core-js" % "2.23",
+  "net.sourceforge.htmlunit" % "htmlunit" % "2.23"
+)
+
+libraryDependencies ++= Seq(
   "org.scalikejdbc" %% "scalikejdbc" % "2.4.2",
   "org.scalikejdbc" %% "scalikejdbc-test" % "2.4.2" % "test",
   "org.scalikejdbc" %% "scalikejdbc-mapper-generator-core" % "2.4.2"
