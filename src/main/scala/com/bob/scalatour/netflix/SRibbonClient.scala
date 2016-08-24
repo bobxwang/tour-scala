@@ -23,7 +23,7 @@ object SRibbonClient {
     @RequestLine("GET /") def index(): String
   }
 
-  getConfigInstance.setProperty(client + ".ribbon.listOfServers", "172.16.40.68:8090,172.16.40.69:8090")
+  getConfigInstance.setProperty(client + ".ribbon.listOfServers", "******")
   getConfigInstance.setProperty(client + ".ribbon.ReadTimeout", 5000)
   getConfigInstance.setProperty(client + ".ribbon.MaxAutoRetries", 1)
   getConfigInstance.setProperty(client + ".ribbon.MaxAutoRetriesNextServer", 1)
