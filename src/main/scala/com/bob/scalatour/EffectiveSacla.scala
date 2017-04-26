@@ -3,10 +3,6 @@ package com.bob.scalatour
 object EffectiveSacla {
 
   val name = null
-  if (name == null) {
-
-  }
-
   if (Option(name).isDefined) {
     // so we can avoid the null
   }
