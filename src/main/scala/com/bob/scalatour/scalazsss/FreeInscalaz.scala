@@ -67,9 +67,9 @@ object FreeInscalaz {
 
   def runTransaction[A](ast: Sql[A]): Exception \/ A = {
     val ds = new BasicDataSource()
-    ds.setUrl("jdbc:mysql://192.168.2.200:3306/51banka?useUnicode=true&characterEncoding=UTF-8")
-    ds.setUsername("root")
-    ds.setPassword("zufangbao69fc")
+    ds.setUrl("jdbc:mysql://127.0.0.1:3306/51banka?useUnicode=true&characterEncoding=UTF-8")
+    ds.setUsername("user")
+    ds.setPassword("pass")
     ds.setDefaultAutoCommit(false)
     val conn = ds.getConnection
     conn.rollback()
