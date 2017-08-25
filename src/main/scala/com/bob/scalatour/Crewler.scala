@@ -22,6 +22,9 @@ object Crewler {
 
   def main(args: Array[String]) {
 
+  }
+
+  private def oldmain() = {
     val webClient = new WebClient(BrowserVersion.CHROME)
     new SimpleFalsifyingWebConnection(webClient)
     webClient.getCookieManager.setCookiesEnabled(true)
@@ -34,5 +37,4 @@ object Crewler {
     val page: HtmlPage = webClient.getPage("http://www.tianyancha.com/company/54859844")
     println(page)
   }
-
 }
