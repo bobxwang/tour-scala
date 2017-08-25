@@ -11,7 +11,7 @@ public class SNothing {
 
         int x = 4;
         java.util.Date date = (x > 4) ? new A() : new B();
-
+        System.out.println(date);
 
         List<Integer> l = new ArrayList<>();
         l.add(1);
