@@ -6,7 +6,7 @@ name := "scalatour"
 
 version := "1.0"
 
-scalaVersion := "2.11.6"
+scalaVersion := "2.11.8"
 
 initialize := {
   assert(
@@ -116,3 +116,6 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" % "akka-cluster_2.11" % akkaverstion,
   "com.typesafe.akka" % "akka-cluster-metrics_2.11" % akkaverstion
 )
+
+libraryDependencies += "org.jsoup" % "jsoup" % "1.10.3"
+libraryDependencies += "com.alibaba" % "fastjson" % "1.2.32"
