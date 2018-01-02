@@ -1,21 +1,23 @@
 package com.bob.javatour.idgenerator.impl;
 
+import java.util.Date;
+
 /**
  * Created by wangxiang on 17/6/19.
  */
 public class SnowFlake {
 
     /**
-     * 起始的时间戳
+     * 起始的时间戳, 2015-01-01
      */
-    private final static long START_STMP = 1463673600000L;
+    private final static long START_STMP = 1420041600000L;
 
     /**
      * 每一部分占用的位数
      */
     private final static long SEQUENCE_BIT = 12;    //序列号占用的位数
-    private final static long MACHINE_BIT = 5;      //机器标识占用的位数
-    private final static long DATACENTER_BIT = 5;   //数据中心占用的位数
+    private final static long MACHINE_BIT = 7;      //机器标识占用的位数
+    private final static long DATACENTER_BIT = 3;   //数据中心占用的位数
 
     /**
      * 每一部分的最大值
@@ -90,26 +92,20 @@ public class SnowFlake {
         return System.currentTimeMillis();
     }
 
-    public void parseUid() {
-        long id = 1497948702853L;
-        long totalBits = 64;
-        long signBits = 1;
-        long timestampBits = 41;
-        long workerIdBits = MACHINE_BIT;
-        long datacentIdBits = DATACENTER_BIT;
-        long sequenceBits = SEQUENCE_BIT;
-
-        long sequence = (id << (totalBits - sequenceBits)) >>> (totalBits - sequenceBits);
-        System.out.println(sequence);
-
+    public String parseUid(long id) {
+        long sequence = id & MAX_SEQUENCE;
+        long machineId = (id >>> MACHINE_LEFT) & ~(-1L << MACHINE_BIT);
+        long datacenterId = (id >>> DATACENTER_LEFT) & ~(-1L << DATACENTER_BIT);
+        Date date = new Date(((id >>> TIMESTMP_LEFT) & ~(-1L << (64 - 1 - DATACENTER_BIT - MACHINE_BIT - SEQUENCE_BIT))) + START_STMP);
+        return (sequence + " | " + machineId + " | " + datacenterId + " |" + date);
     }
 
     public static void main(String[] args) {
 
-        SnowFlake snowFlake = new SnowFlake(0,0);
-        long id = snowFlake.getNextMill();
+        SnowFlake snowFlake = new SnowFlake(4, 12);
+        long id = snowFlake.nextId();
         System.out.println(id);
         System.out.println(Long.toBinaryString(id));
-        snowFlake.parseUid();
+        System.out.println(snowFlake.parseUid(id));
     }
 }

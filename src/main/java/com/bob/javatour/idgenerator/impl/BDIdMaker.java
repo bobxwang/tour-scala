@@ -1,11 +1,14 @@
 package com.bob.javatour.idgenerator.impl;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -16,13 +19,9 @@ public class BDIdMaker {
     /**
      * Bits allocate
      */
-//    protected int timeBits = 28;
-//    protected int workerBits = 22;
-//    protected int seqBits = 13;
-
-    protected int timeBits = 41;
-    protected int workerBits = 10;
-    protected int seqBits = 12;
+    protected int timeBits = 28;
+    protected int workerBits = 22;
+    protected int seqBits = 13;
 
     /**
      * Customer epoch, unit as second. For example 2016-05-20 (ms: 1463673600000)
@@ -130,39 +129,24 @@ public class BDIdMaker {
         return currentSecond;
     }
 
-
-    public void setTimeBits(int timeBits) {
-        if (timeBits > 0) {
-            this.timeBits = timeBits;
-        }
-    }
-
-    public void setWorkerBits(int workerBits) {
-        if (workerBits > 0) {
-            this.workerBits = workerBits;
-        }
-    }
-
-    public void setSeqBits(int seqBits) {
-        if (seqBits > 0) {
-            this.seqBits = seqBits;
-        }
-    }
-
-    public void setEpochStr(String epochStr) throws ParseException {
-        if (StringUtils.isNotBlank(epochStr)) {
-            this.epochStr = epochStr;
-            this.epochSeconds = TimeUnit.MILLISECONDS.toSeconds(DateUtils.parseDate(epochStr, "yyyy-MM-dd").getTime());
-
-        }
-    }
-
     public static void main(String[] args) {
-        BDIdMaker bdIdMaker = new BDIdMaker();
+        final BDIdMaker bdIdMaker = new BDIdMaker();
         long id = bdIdMaker.getUID();
         System.out.println(id);
         System.out.println(Long.toBinaryString(id));
         String idValue = bdIdMaker.parseUID(id);
         System.out.println(idValue);
+
+        List<Long> atemp = Lists.newArrayListWithCapacity(100);
+        for (int i = 0; i < 100; i++) {
+            atemp.add(bdIdMaker.getUID());
+        }
+
+        atemp.forEach(x -> {
+            System.out.println(x);
+            System.out.println(Long.toBinaryString(x));
+            System.out.println(bdIdMaker.parseUID(x));
+            System.out.println("----------");
+        });
     }
 }

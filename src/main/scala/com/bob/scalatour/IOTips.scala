@@ -105,9 +105,9 @@ object IOTips {
    */
   def together2result(rs: String): String = {
     val jv: JValue = parse(rs)
-    val anticheat = jv \ "left";
-    val credit = jv \ "middle";
-    val salary = jv \ "right";
+    val anticheat = jv \ "left"
+    val credit = jv \ "middle"
+    val salary = jv \ "right"
     val anticheatlevel = (anticheat \ "level").extract[Double]
     val anticheatno = (anticheat \ "anticheat").extract[Double]
     val creditlevel = (credit \ "level").extract[Double]
