@@ -47,14 +47,14 @@ libraryDependencies += "com.typesafe" % "config" % "1.3.0"
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.38"
 
 libraryDependencies ++= Seq(
-  "com.twitter" %% "finagle-http" % "6.34.0",
-  "com.twitter" %% "finagle-mysql" % "6.34.0",
+  "com.twitter" %% "finagle-http" % "6.44.0",
+  "com.twitter" %% "finagle-mysql" % "6.44.0",
   "com.twitter" %% "finagle-redis" % "6.34.0"
 ).map(_.exclude("com.google.code.findbugs", "jsr305"))
 
 libraryDependencies += "org.json4s" %% "json4s-native" % "3.3.0"
 
-libraryDependencies += "com.squareup.okhttp3" % "okhttp" % "3.2.0"
+libraryDependencies += "com.squareup.okhttp3" % "okhttp" % "3.9.1"
 
 libraryDependencies ++= Seq(
   "com.google.inject" % "guice" % "4.0",
@@ -102,6 +102,7 @@ libraryDependencies ++= Seq(
 // a consistency, persistance and performance map using off-heap
 //libraryDependencies += "net.openhft" % "chronicle-map" % "3.8.0"
 
+// a better file operation
 libraryDependencies += "com.github.pathikrit" %% "better-files" % "2.16.0"
 
 libraryDependencies += "com.rockymadden.stringmetric" %% "stringmetric-core" % "0.27.4"
@@ -119,3 +120,9 @@ libraryDependencies ++= Seq(
 
 libraryDependencies += "org.jsoup" % "jsoup" % "1.10.3"
 libraryDependencies += "com.alibaba" % "fastjson" % "1.2.32"
+
+// 当一个包不知道是被什么包给引入的时候, 又想排除此包, 可以使用此
+// stax/stax-api/1.0.1 跟xml-apis/xml-apis/1.4.01包一样, 而且后者更强大
+libraryDependencies := libraryDependencies.value.map(_.exclude("stax", "stax-api"))
+// 或者使用排除包总的, 使用这两个都可以排除包
+excludeDependencies += "com.example" %% "foo"

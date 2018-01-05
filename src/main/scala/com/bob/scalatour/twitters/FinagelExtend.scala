@@ -19,8 +19,8 @@ import org.jboss.netty.handler.codec.string.{StringDecoder, StringEncoder}
 import org.jboss.netty.util.CharsetUtil
 
 /**
- * Created by bob on 16/5/25.
- */
+  * Created by bob on 16/5/25.
+  */
 object FinagelExtend {
 
   implicit val service = new Service[String, String] {
@@ -30,9 +30,10 @@ object FinagelExtend {
   }
 
   /**
-   * it just an echo service
-   * @param args
-   */
+    * it just an echo service
+    *
+    * @param args
+    */
   def main(args: Array[String]) {
 
     new EchoService("127.0.0.1", 8887).start
@@ -41,18 +42,13 @@ object FinagelExtend {
 
     // after the service is start, below client can run
     val addr = new java.net.InetSocketAddress("localhost", 8888)
-    val transporter = Netty3Transporter[String, String](StringClientPipeline, StackClient.defaultParams)
-    val bridge: Future[Service[String, String]] =
-      transporter(addr) map { transport =>
-        new SerialClientDispatcher(transport)
-      }
+    val transporter = Netty3Transporter[String, String](StringClientPipeline, addr, StackClient.defaultParams)
+    val bridge = transporter.apply().map(tr => new SerialClientDispatcher[String, String](tr))
+
     val client = new Service[String, String] {
-      override def apply(req: String) = bridge flatMap { svc =>
-        svc(req).ensure {
-          svc.close()
-        }
-      }
+      override def apply(request: String): Future[String] = bridge flatMap (svc => svc(request).ensure(svc.close()))
     }
+
     import Filters._
     val newClient = retry andThen timeout andThen maskCancel andThen client
     println(Await.result(newClient("hello Fuck u self"))) // it will print hello Fuck u self come on
@@ -73,10 +69,11 @@ object FinagelExtend {
   }
 
   /**
-   * it just a echo service,after it start,then we can echo "hello" | nc host port to test
-   * @param host
-   * @param port
-   */
+    * it just a echo service,after it start,then we can echo "hello" | nc host port to test
+    *
+    * @param host
+    * @param port
+    */
   class EchoService(host: String, port: Int) {
 
     def start(implicit service: Service[String, String]): Unit = {
@@ -167,9 +164,9 @@ object FinagelExtend {
       protected type In = String
       protected type Out = String
 
-      protected def copy1(stack: Stack[ServiceFactory[String, String]], params: Stack.Params): Client = copy(stack, params)
+      protected override def copy1(stack: Stack[ServiceFactory[String, String]], params: Stack.Params): Client = copy(stack, params)
 
-      protected def newTransporter(): Transporter[String, String] = Netty3Transporter(StringClientPipeline, params)
+      override protected def newTransporter(addr: SocketAddress): Transporter[String, String] = Netty3Transporter(StringClientPipeline, addr, params)
 
       protected def newDispatcher(transport: Transport[String, String]): Service[String, String] = new SerialClientDispatcher(transport)
     }
@@ -182,7 +179,7 @@ object FinagelExtend {
       protected type In = String
       protected type Out = String
 
-      protected def copy1(stack: Stack[ServiceFactory[String, String]] = this.stack, params: Stack.Params = this.params): Server = copy(stack, params)
+      override protected def copy1(stack: Stack[ServiceFactory[String, String]], params: Stack.Params): Server = copy(stack, params)
 
       protected def newListener(): Listener[String, String] = Netty3Listener(StringServerPipeline, params)
 

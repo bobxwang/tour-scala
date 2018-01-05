@@ -3,11 +3,11 @@ package com.bob.scalatour.twitters
 import java.sql.Timestamp
 import java.util.{Date, TimeZone}
 
-import com.twitter.finagle.exp.Mysql
-import com.twitter.finagle.exp.mysql.TimestampValue
 import com.twitter.util.{Await => twitterAwait}
 import com.twitter.finagle.client._
 import com.twitter.conversions.time._
+import com.twitter.finagle.Mysql
+import com.twitter.finagle.mysql.TimestampValue
 
 object MysqlTips {
 
@@ -16,12 +16,12 @@ object MysqlTips {
     this.sqlClient()
 
     val mysqlClient = Mysql.client
-      .withCredentials("root", "zufangbao69fc")
-      .withDatabase("51banka")
+      .withCredentials("root", "password")
+      .withDatabase("dbname")
       .configured(DefaultPool.Param(low = 0, high = 10,
-      idleTime = 5.minutes,
-      bufferSize = 0,
-      maxWaiters = Int.MaxValue))
+        idleTime = 5.minutes,
+        bufferSize = 0,
+        maxWaiters = Int.MaxValue))
       .newRichClient("192.168.2.200:3306")
 
     val query = "select * from T_BKProcess where BankID = 5 limit 5"
@@ -35,13 +35,14 @@ object MysqlTips {
     }).ensure(mysqlClient.close)
     twitterAwait.result(resultq)
 
-    val insertSql = """ INSERT INTO `51banka`.`afenqi`
-                      |(`UserId`,
-                      |`Credit`,
-                      |`Creditlevel`,
-                      |`CreateTime`)
-                      |VALUES
-                      |(?,?,?,?); """.stripMargin.replaceAll("\n", "")
+    val insertSql =
+      """ INSERT INTO `scheme`.`dbname`
+        |(`UserId`,
+        |`Credit`,
+        |`Creditlevel`,
+        |`CreateTime`)
+        |VALUES
+        |(?,?,?,?); """.stripMargin.replaceAll("\n", "")
     val ps = mysqlClient.prepare(insertSql)
     val timezone = new TimestampValue(TimeZone.getDefault, TimeZone.getDefault)
     twitterAwait.result(ps(12, 1, 2, timezone.apply(new Timestamp(new Date().getTime))).ensure(mysqlClient.close))
@@ -51,8 +52,8 @@ object MysqlTips {
 
   def sqlClient() = {
     val mysqlClient = Mysql.client
-      .withCredentials("loanuser", "k!dFdrPJBhruHiS8OlL9")
-      .withDatabase("LoanPro")
+      .withCredentials("username", "password")
+      .withDatabase("dbname")
       .newRichClient("192.168.59.135:3310")
     val query = "select * from bank_account limit 10"
     mysqlClient.select(query) {

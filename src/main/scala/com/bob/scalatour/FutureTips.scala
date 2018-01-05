@@ -2,17 +2,17 @@ package com.bob.scalatour
 
 import java.util.concurrent.Executors
 
-import com.twitter.util.NonFatal
+import scala.util.control.NonFatal
 
 import scala.concurrent._
 import ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
 
 /**
- * 一个Future实例总是和一个(也只能是一个)Promise实例关联在一起，
- * 如果你在REPL里调用future方法会发现返回的也是Promise
- * Future持有一个尚未完成运算结果的promise(一个简单的容器，占位符)，包含三个状态(pending,failed,completed)
- */
+  * 一个Future实例总是和一个(也只能是一个)Promise实例关联在一起，
+  * 如果你在REPL里调用future方法会发现返回的也是Promise
+  * Future持有一个尚未完成运算结果的promise(一个简单的容器，占位符)，包含三个状态(pending,failed,completed)
+  */
 object FutureTips {
 
   case class Friend(name: String, phone: String)
@@ -53,8 +53,8 @@ object FutureTips {
     // 对于其它没有像Future实现Awaitable trait的代码，可通过如下代码实现阻塞
     blocking {
       /**
-       * u code
-       */
+        * u code
+        */
     }
 
     println("main thread invoke done")
