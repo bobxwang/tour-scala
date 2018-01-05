@@ -14,7 +14,6 @@ like maven, in test dir, it has many test function, but not test the code in mai
 # What content now have
 * [akka](http://www.akka.io)
 * [netflix](https://github.com/netflix)
-* [rx.java](https://github.com/ReactiveX/RxJava)
 * [twitters](https://github.com/twitter/)
 * design pattern 
 * [scalaz](https://github.com/scalaz/scalaz)

@@ -83,13 +83,7 @@ libraryDependencies ++= Seq(
 libraryDependencies += ("com.netflix.eureka" % "eureka-client" % "1.1.147")
   .exclude("javax.ws.rs", "jsr311-api")
   .exclude("xmlpull", "xmlpull")
-  .excludeAll(ExclusionRule(organization = "commons-logging"),
-    ExclusionRule(organization = "io.reactivex", name = "rxjava"))
-
-libraryDependencies ++= Seq(
-  "io.reactivex" % "rxjava-joins" % "0.22.0",
-  "io.reactivex" % "rxjava" % "1.1.5"
-)
+  .excludeAll(ExclusionRule(organization = "commons-logging"))
 
 /* 依赖okhttpclient版本为2，去掉 */
 libraryDependencies ++= Seq(
@@ -105,6 +99,7 @@ libraryDependencies ++= Seq(
 // a better file operation
 libraryDependencies += "com.github.pathikrit" %% "better-files" % "2.16.0"
 
+// 字符串相似性试题算法库
 libraryDependencies += "com.rockymadden.stringmetric" %% "stringmetric-core" % "0.27.4"
 
 val akkaverstion = "2.4.7"
@@ -119,7 +114,6 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies += "org.jsoup" % "jsoup" % "1.10.3"
-libraryDependencies += "com.alibaba" % "fastjson" % "1.2.32"
 
 // 当一个包不知道是被什么包给引入的时候, 又想排除此包, 可以使用此
 // stax/stax-api/1.0.1 跟xml-apis/xml-apis/1.4.01包一样, 而且后者更强大
