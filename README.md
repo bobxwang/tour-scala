@@ -20,4 +20,5 @@ like maven, in test dir, it has many test function, but not test the code in mai
 * [ScalikeJdbc](https://github.com/scalikejdbc/scalikejdbc)
 * some tips about reflect,collection and so on
 * macros
+* [idgenerator-snowflake](https://github.com/twitter/snowflake)
 
