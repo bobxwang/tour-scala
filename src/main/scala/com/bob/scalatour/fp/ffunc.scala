@@ -4,32 +4,26 @@ case class Box[A](a: A)
 
 trait SBox[A] {
   def get: A
-
   // 如果SBox是Functor，就必须实现map函数, Functor其实就是可以对包装过的值做处理的函数
   // yeah,this is exactly what a functor is,a value with context,that contains an inner value with an associated context
   def map[B](f: A => B): SBox[B] = SBox(f(get))
-
   // 有了apply后，那么，SBOX就是一个Applicative，Applicative extends Functor，
   // 同样是对F[_]内元素进行函数施用，不同的是这个函数也是包在高阶类型，是F[A=>B]，
   // 可以对所有可游览结构(Traversable)，包括折叠(Foldable)，嵌入的元素进行函数调用
   def apply[B](f: SBox[A => B]): SBox[B] = SBox(f.get(get))
-
   // 有了flatMap后，那么，SBox就是一个Monad，Monad extends Applicative，
   // 更重要的是，Monad成就了for-comprehension，通过此可以实现"行令编程模式(imperative programming)"，
   // 跟传统的行令编程模式最大分别就是泛函编程中没有变量声明，变量是包嵌在一个结构里的(MyData[data])
   def flatMap[B](f: A => SBox[B]): SBox[B] = f(get)
 }
-
+/** Monad is a structure that represents sequential computations.
+  * The type of monad defines the means to chain the various operations together or we can say the nesting of functions of same type. This allows the programmer to build the pipleline, which is used to process the data in a sequence of steps.
+  * In the monad the output of a calculation at any step is the input to the other calculation which runs as a parent to the current step. So each action is decorated with additional processing rules provided by the monad.
+  */
 object SBox {
   def apply[A](a: A) = new SBox[A] {
     override def get: A = a
   }
-
-  /**
-   * Monad is a structure that represents sequential computations.
-   * The type of monad defines the means to chain the various operations together or we can say the nesting of functions of same type. This allows the programmer to build the pipleline, which is used to process the data in a sequence of steps.
-   * In the monad the output of a calculation at any step is the input to the other calculation which runs as a parent to the current step. So each action is decorated with additional processing rules provided by the monad.
-   */
 }
 
 object ffunc {
