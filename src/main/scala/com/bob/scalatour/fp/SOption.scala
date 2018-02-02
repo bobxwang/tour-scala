@@ -19,7 +19,7 @@ sealed trait SOption[+A] {
 
   def orElse1[B >: A](ob: => SOption[B]): SOption[B] = this match {
     case SNone => ob
-    case SSome(a) => this
+    case SSome(_) => this
   }
 
   def filter(f: A => Boolean): SOption[A] = this match {
