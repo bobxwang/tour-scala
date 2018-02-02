@@ -102,6 +102,8 @@ libraryDependencies += "com.github.pathikrit" %% "better-files" % "2.16.0"
 // 字符串相似性试题算法库
 libraryDependencies += "com.rockymadden.stringmetric" %% "stringmetric-core" % "0.27.4"
 
+libraryDependencies += "org.bouncycastle" % "bcprov-jdk15on" % "1.58"
+
 val akkaverstion = "2.4.7"
 
 libraryDependencies ++= Seq(
