@@ -13,9 +13,9 @@ object TypeExtens {
      */
     def try2Int(): Option[Int] = {
       try {
-        Some(java.lang.Double.valueOf(s).intValue())
+        Some(s.toInt)
       } catch {
-        case e: Exception => None
+        case _: Exception => None
       }
     }
 
@@ -27,7 +27,7 @@ object TypeExtens {
       try {
         Some(s.toLong)
       } catch {
-        case e: Exception => None
+        case _: Exception => None
       }
     }
   }
