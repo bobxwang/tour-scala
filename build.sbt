@@ -40,7 +40,12 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
 
 libraryDependencies ++= Seq("org.specs2" %% "specs2-core" % "3.8.3" % "test")
 
-libraryDependencies += "org.scala-lang.modules" % "scala-async_2.11" % "0.9.6-RC2"
+libraryDependencies ++= Seq(
+  "org.scala-lang.modules" % "scala-async_2.11" % "0.9.7",
+  "org.scala-lang.modules" % "scala-parser-combinators_2.11" % "1.1.0"
+)
+resolvers += Resolver.sonatypeRepo("releases")
+addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
 libraryDependencies += "com.typesafe" % "config" % "1.3.0"
 
