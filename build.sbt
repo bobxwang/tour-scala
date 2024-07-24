@@ -104,6 +104,8 @@ libraryDependencies ++= Seq(
 // a better file operation
 libraryDependencies += "com.github.pathikrit" %% "better-files" % "2.16.0"
 
+libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.38"
+
 // 字符串相似性试题算法库
 libraryDependencies += "com.rockymadden.stringmetric" %% "stringmetric-core" % "0.27.4"
 

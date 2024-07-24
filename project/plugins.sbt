@@ -6,9 +6,7 @@ resolvers += Resolver.url("https://github.com/jrudolph/sbt-dependency-graph.git"
 
 resolvers += Resolver.url("https://github.com/google/guice.git")
 
-addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.1")
-
-libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.38"
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.10")
 
 addSbtPlugin("org.scalikejdbc" %% "scalikejdbc-mapper-generator" % "2.4.2")
 
