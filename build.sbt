@@ -1,19 +1,14 @@
-scalikejdbcSettings
-
-organization := "com.bob"
+ThisBuild /organization := "com.bob"
 
 name := "scalatour"
 
 version := "1.0"
 
-scalaVersion := "2.11.12"
+scalaVersion := "2.12.8"
 
-initialize := {
-  assert(
-    Integer.parseInt(sys.props("java.specification.version").split("\\.")(1))
-      >= 7,
-    "Java 7 or above required")
-}
+assembly / mainClass := Some("com.bob.scalatour.IOTips")
+
+assembly / assemblyJarName := "com.bob.nothing.jar"
 
 //-Yno-adapted-args --> 避免scala编译器在方法参数上自作聪明的适配
 //-Xlint --> 已经包含Ywarn-adapted-args,只是警告还是能编译过去
@@ -29,22 +24,25 @@ scalacOptions ++= Seq(
   , "-Xfatal-warnings"
   , "-encoding", "utf8"
   , "-Yno-adapted-args"
-  //  , "-Ywarn-dead-code"
-  //  , "-Ywarn-unused"
-  //  , "-Ywarn-unused-import"
+//    , "-Ywarn-dead-code"
+//    , "-Ywarn-unused"
+//    , "-Ywarn-unused-import"
 )
 
 javaOptions += "-server -Xss1m -Xmx2g"
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.19" % "test"
 
-libraryDependencies ++= Seq("org.specs2" %% "specs2-core" % "3.8.3" % "test")
+// https://mvnrepository.com/artifact/org.specs2/specs2-core
+libraryDependencies += "org.specs2" %% "specs2-core" % "4.20.8" % Test
+// https://mvnrepository.com/artifact/org.specs2/specs2-matcher
+libraryDependencies += "org.specs2" %% "specs2-matcher" % "4.20.8" % Test
 
 libraryDependencies ++= Seq(
-  "org.scala-lang.modules" % "scala-async_2.11" % "0.9.7",
-  "org.scala-lang.modules" % "scala-parser-combinators_2.11" % "1.1.0"
+  "org.scala-lang.modules" %% "scala-async" % "1.0.1",
+  "org.scala-lang.modules" %% "scala-parser-combinators" % "2.4.0"
 )
-resolvers += Resolver.sonatypeRepo("releases")
+resolvers ++= Resolver.sonatypeOssRepos("releases")
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
 libraryDependencies += "com.typesafe" % "config" % "1.3.0"
@@ -57,7 +55,7 @@ libraryDependencies ++= Seq(
   "com.twitter" %% "finagle-redis" % "6.44.0"
 ).map(_.exclude("com.google.code.findbugs", "jsr305"))
 
-libraryDependencies += "org.json4s" %% "json4s-native" % "3.3.0"
+libraryDependencies += "org.json4s" %% "json4s-native" % "4.0.7"
 
 libraryDependencies += "com.squareup.okhttp3" % "okhttp" % "3.9.1"
 
@@ -72,17 +70,17 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "org.scalikejdbc" %% "scalikejdbc" % "2.4.2",
-  "org.scalikejdbc" %% "scalikejdbc-test" % "2.4.2" % "test",
-  "org.scalikejdbc" %% "scalikejdbc-mapper-generator-core" % "2.4.2"
+  "org.scalikejdbc" %% "scalikejdbc" % "4.3.0",
+  "org.scalikejdbc" %% "scalikejdbc-test" % "4.3.0" % "test",
+  "org.scalikejdbc" %% "scalikejdbc-mapper-generator-core" % "4.3.0"
 )
 
 libraryDependencies += ("org.apache.kafka" % "kafka_2.10" % "0.8.2.0")
   .exclude("org.apache.zookeeper", "zookeeper")
 
 libraryDependencies ++= Seq(
-  "org.scalaz" %% "scalaz-core" % "7.2.2",
-  "org.scalaz" %% "scalaz-effect" % "7.2.2"
+  "org.scalaz" %% "scalaz-core" % "7.3.8",
+  "org.scalaz" %% "scalaz-effect" % "7.3.8"
 )
 
 libraryDependencies += ("com.netflix.eureka" % "eureka-client" % "1.1.147")
@@ -102,12 +100,12 @@ libraryDependencies ++= Seq(
 //libraryDependencies += "net.openhft" % "chronicle-map" % "3.8.0"
 
 // a better file operation
-libraryDependencies += "com.github.pathikrit" %% "better-files" % "2.16.0"
+libraryDependencies += "com.github.pathikrit" %% "better-files" % "3.9.2"
 
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.38"
 
 // 字符串相似性试题算法库
-libraryDependencies += "com.rockymadden.stringmetric" %% "stringmetric-core" % "0.27.4"
+libraryDependencies += "com.rockymadden.stringmetric" % "stringmetric-core_2.11" % "0.27.4"
 
 libraryDependencies += "org.bouncycastle" % "bcprov-jdk15on" % "1.58"
 
@@ -129,3 +127,18 @@ libraryDependencies += "org.jsoup" % "jsoup" % "1.10.3"
 libraryDependencies := libraryDependencies.value.map(_.exclude("stax", "stax-api"))
 // 或者使用排除包总的, 使用这两个都可以排除包
 excludeDependencies += "com.example" %% "foo"
+
+assembly / assemblyMergeStrategy := {
+  case PathList("javax", "servlet", xs@_*) => MergeStrategy.first
+  case PathList(ps@_*) if ps.last endsWith ".html" => MergeStrategy.first
+  case "application.conf" => MergeStrategy.concat
+  case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.concat
+  case x if x.endsWith("BUILD") => MergeStrategy.last
+  case "unwanted.txt" => MergeStrategy.discard
+  case x =>
+    val oldStrategy = (assembly / assemblyMergeStrategy).value
+    if(oldStrategy == MergeStrategy.deduplicate)
+      MergeStrategy.first
+    else
+      oldStrategy(x)
+}
